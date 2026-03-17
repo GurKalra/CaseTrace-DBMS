@@ -1,33 +1,79 @@
-# --- Environment / Secrets ---
+# ------------------------------
+# Environment / Secrets
+# ------------------------------
+# Local environment files (do NOT commit credentials or keys)
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
 
-# --- Dependencies ---
+# ------------------------------
+# Dependencies
+# ------------------------------
+# Node package directories
 node_modules/
-jspm_packages/
+**/node_modules/
 
-# --- CaseTrace Specifics ---
+# ------------------------------
+# Build / Output
+# ------------------------------
+# Build artifacts, transpiled output, and coverage reports
+dist/
+build/
+coverage/
+.tmp/
+
+# ------------------------------
+# CaseTrace Specifics
+# ------------------------------
 # Do not push uploaded evidence files to GitHub
 casetrace-backend/uploads/*
 !casetrace-backend/uploads/.gitkeep
 
-# --- OS / IDE Specifics ---
+# Ignore local database files (if any)
+*.sqlite
+*.sqlite3
+
+# ------------------------------
+# OS / IDE Specifics
+# ------------------------------
 .DS_Store
 Thumbs.db
+
+# VS Code
 .vscode/
+
+# JetBrains
 .idea/
+
+# Visual Studio
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
+
+# Linux editors
 *.swp
 
-# --- Logs ---
+# ------------------------------
+# Logs
+# ------------------------------
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 logs/
 *.log
+
+# ------------------------------
+# Misc
+# ------------------------------
+# Dependency directories created by certain tools
+jspm_packages/
+
+# Archive files
+*.tgz
+*.zip
+
+# Mac resource forks
+Icon?
+
+package-lock.json
+yarn.lock
