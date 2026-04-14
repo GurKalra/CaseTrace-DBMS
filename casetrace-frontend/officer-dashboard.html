@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Dashboard - CaseTrace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .gov-header { background-color: var(--officer-color); border-bottom-color: #95a5a6; }
+        .sidebar-nav li a:hover, .sidebar-nav li a.active { color: var(--officer-color); border-left-color: var(--officer-color); background-color: #f8f9fa; }
+        .dashboard-content h2, .stat-value { color: var(--text-main); }
+    </style>
+</head>
+<body class="dashboard-body">
+    <header class="gov-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="emblem-placeholder">🏛️</div>
+                <div>
+                    <h1>CaseTrace</h1>
+                    <p class="subtitle" style="color: #bdc3c7;">Officer Management Portal</p>
+                </div>
+            </div>
+            <div class="header-info">
+                <span id="header-officer-name">Welcome, Officer</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active" id="nav-all-complaints" onclick="showAllComplaints(event)">View All Complaints</a></li>
+                <li><a href="#" id="nav-filter-complaints" onclick="showFilterComplaints(event)">Filter Complaints</a></li>
+                <li><a href="#" id="nav-add-note" onclick="showAddNote(event)">Add Investigation Notes</a></li>
+                <li class="logout-item"><a href="#" id="nav-logout" onclick="logoutOfficer(event)">Secure Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-content">
+            
+            <!-- All Complaints View -->
+            <div id="all-complaints-view" class="view-section active">
+                <h2>All Complaints Directory</h2>
+                <p>Confidential view of all cases logged securely into the system.</p>
+                
+                <div class="table-responsive">
+                    <table class="gov-table" id="all-complaints-table">
+                        <thead>
+                            <tr>
+                                <th>Complaint ID</th>
+                                <th>Category</th>
+                                <th>Citizen Name</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-complaints-body">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Filter Complaints View -->
+            <div id="filter-complaints-view" class="view-section">
+                <h2>Filter & Triage Complaints</h2>
+                <p>Filter cases by required urgency or status classification.</p>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                    <select id="filter-priority" style="padding: 0.6rem; border: 1px solid var(--border); border-radius: 4px; min-width: 150px;">
+                        <option value="">Any Priority</option>
+                        <option value="HIGH">High Priority</option>
+                        <option value="MEDIUM">Medium Priority</option>
+                        <option value="LOW">Low Priority</option>
+                    </select>
+                    
+                    <select id="filter-status" style="padding: 0.6rem; border: 1px solid var(--border); border-radius: 4px; min-width: 150px;">
+                        <option value="">Any Status</option>
+                        <option value="FILED">Filed</option>
+                        <option value="VERIFIED">Verified</option>
+                        <option value="INVESTIGATING">Investigating</option>
+                        <option value="ACTION_TAKEN">Action Taken</option>
+                        <option value="CLOSED">Closed</option>
+                    </select>
+
+                    <button class="btn btn-primary officer-btn" onclick="applyFilters()">Apply Filters</button>
+                </div>
+                
+                <div class="table-responsive" style="margin-bottom: 2rem;">
+                    <table class="gov-table">
+                        <thead>
+                            <tr>
+                                <th>Complaint ID</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="filtered-complaints-body">
+                            <tr><td colspan="5">Apply filters to see complaints.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Status Update Section (Hidden until a case is selected) -->
+                <div id="status-update-container" style="display:none; padding: 1.5rem; border: 1px solid var(--border); background: var(--card-bg); border-radius: 6px;">
+                     <h3 style="margin-bottom: 0.5rem; color: var(--officer-color); font-size:1.1rem;">Update Case Status</h3>
+                     <p>Managing Case: <strong id="update-case-id"></strong></p>
+                     <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
+                        <select id="new-status" style="padding: 0.6rem; border-radius:4px; border: 1px solid var(--border);">
+                            <option value="FILED">FILED</option>
+                            <option value="VERIFIED">VERIFIED</option>
+                            <option value="INVESTIGATING">INVESTIGATING</option>
+                            <option value="ACTION_TAKEN">ACTION_TAKEN</option>
+                            <option value="CLOSED">CLOSED</option>
+                            <option value="REJECTED">REJECTED</option>
+                        </select>
+                        <button class="btn btn-primary officer-btn" onclick="submitStatusUpdate()">Update Status</button>
+                     </div>
+                     <div id="update-message" class="message-box" style="margin-top:1rem; display:none;"></div>
+                </div>
+
+            </div>
+
+            <!-- Add Investigation Notes View -->
+            <div id="add-note-view" class="view-section">
+                <h2>Add Investigation Notes</h2>
+                <p>Append a permanent note to a case file.</p>
+                <form id="add-note-form" class="auth-form" onsubmit="handleAddNote(event)">
+                    <div class="form-group">
+                        <label>Select Complaint</label>
+                        <select id="note-complaint-id" required>
+                            <option value="" disabled selected>Loading cases...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Investigation Details</label>
+                        <textarea id="note-text" rows="6" required placeholder="Type your formal notes here..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary officer-btn">Save Note Permanently</button>
+                    <div id="add-note-message" class="message-box" style="margin: 1rem 0; display:none;"></div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <footer class="gov-footer">
+        <p>&copy; 2026 CaseTrace. A Government Initiative.</p>
+    </footer>
+
+    <script src="officer-dashboard.js"></script>
+</body>
+</html>

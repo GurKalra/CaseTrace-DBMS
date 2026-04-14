@@ -1,6 +1,46 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const db = require("../db/connection");
+
+// OFFICER REGISTRATION
+const registerOfficer = async (req, res) => {
+  const { full_name, badge_number, rank_title, dept_id, email, password } = req.body;
+
+  if (!full_name || !badge_number || !email || !password || !rank_title || !dept_id) {
+    return res.status(400).json({ error: "All fields are required." });
+  }
+
+  try {
+    const [existingOfficer] = await db.query(
+      "SELECT * FROM Officer WHERE email = ? OR badge_number = ? OR full_name = ?", 
+      [email, badge_number, full_name]
+    );
+    const [existingCitizen] = await db.query(
+      "SELECT * FROM Citizen WHERE email = ? OR full_name = ?", 
+      [email, full_name]
+    );
+
+    if (existingOfficer.length > 0 || existingCitizen.length > 0) {
+      return res.status(400).json({ error: "Email, Badge Number, or Name already registered in the system." });
+    }
+
+    const password_hash = await bcrypt.hash(password, 10);
+    const officer_id = crypto.randomUUID();
+
+    const insertQuery = `
+      INSERT INTO Officer (officer_id, badge_number, full_name, rank_title, dept_id, email, password_hash)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    await db.query(insertQuery, [officer_id, badge_number, full_name, rank_title, dept_id, email, password_hash]);
+
+    res.status(201).json({ message: "Officer registered successfully! Please login." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error during registration." });
+  }
+};
 
 // OFFICER LOGIN
 const officerLogin = async (req, res) => {
@@ -109,9 +149,22 @@ const addInvestigationNote = async (req, res) => {
   }
 };
 
+// GET ALL DEPARTMENTS (For Registration Dropdown)
+const getAllDepartments = async (req, res) => {
+  try {
+    const [departments] = await db.query("SELECT * FROM Department");
+    res.json(departments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch departments" });
+  }
+};
+
 module.exports = {
+  registerOfficer,
   officerLogin,
   getAllComplaints,
   updateComplaintStatus,
   addInvestigationNote,
+  getAllDepartments,
 };

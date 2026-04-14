@@ -84,8 +84,11 @@ async function handleCitizenLogin(e) {
             showMessage(data.error || 'Login failed', true);
         } else {
             showMessage(`Login successful! Welcome, ${data.user.name}`);
-            // In a real app, you would save data.token to localStorage and redirect to dashboard
             localStorage.setItem('citizen_token', data.token);
+            // Redirect to dashboard
+            setTimeout(() => {
+                window.location.href = 'citizen-dashboard.html';
+            }, 1000);
         }
     } catch (err) {
         showMessage('Unable to connect to the server. Is the backend running?', true);
@@ -110,10 +113,65 @@ async function handleOfficerLogin(e) {
         if (!response.ok) {
             showMessage(data.error || 'Login failed', true);
         } else {
-            showMessage(`Login successful! Officer ${data.officer.name} (Badge: ${data.officer.badge}) authenticated.`);
+            showMessage(`Login successful! Welcome, Officer`);
             localStorage.setItem('officer_token', data.token);
+            setTimeout(() => {
+                window.location.href = 'officer-dashboard.html';
+            }, 1000);
         }
     } catch (err) {
         showMessage('Unable to connect to the server. Is the backend running?', true);
+    }
+}
+
+async function handleOfficerRegister(e) {
+    e.preventDefault();
+    
+    const full_name = document.getElementById('off-reg-name').value;
+    const badge_number = document.getElementById('off-reg-badge').value;
+    const rank_title = document.getElementById('off-reg-rank').value;
+    const dept_id = document.getElementById('off-reg-dept').value;
+    const email = document.getElementById('off-reg-email').value;
+    const password = document.getElementById('off-reg-password').value;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/officer/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ full_name, badge_number, rank_title, dept_id, email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            showMessage(data.error || 'Registration failed', true);
+        } else {
+            showMessage('Officer registered successfully! You can now login.');
+            document.getElementById('officer-register-form').reset();
+        }
+    } catch (err) {
+        showMessage('Unable to connect to the server. Is the backend running?', true);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadDepartments();
+});
+
+async function loadDepartments() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/officer/departments`);
+        if (response.ok) {
+            const departments = await response.json();
+            const select = document.getElementById('off-reg-dept');
+            departments.forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept.dept_id;
+                option.textContent = dept.dept_name;
+                select.appendChild(option);
+            });
+        }
+    } catch (err) {
+        console.error("Failed to load departments:", err);
     }
 }

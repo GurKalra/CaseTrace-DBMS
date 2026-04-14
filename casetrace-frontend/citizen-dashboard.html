@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Dashboard - CaseTrace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <header class="gov-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <!-- Using a generic emblem placeholder -->
+                <div class="emblem-placeholder">🏛️</div>
+                <div>
+                    <h1>CaseTrace</h1>
+                    <p class="subtitle">National Crime & Case Tracking Network</p>
+                </div>
+            </div>
+            <div class="header-info">
+                <span id="header-user-name">Welcome, Citizen</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active" id="nav-dashboard" onclick="showDashboard(event)">Dashboard</a></li>
+                <li><a href="#" id="nav-file-complaint" onclick="showFileComplaint(event)">File Complaint</a></li>
+                <li><a href="#" id="nav-my-complaints" onclick="showMyComplaints(event)">My Complaints</a></li>
+                <li><a href="#" id="nav-upload-evidence" onclick="showUploadEvidence(event)">Upload Evidence</a></li>
+                <li class="logout-item"><a href="#" id="nav-logout" onclick="logout(event)">Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-content">
+            <!-- Dashboard View -->
+            <div id="dashboard-view" class="view-section active">
+                <h2>Citizen Dashboard</h2>
+                <p>Welcome to your personal portal. Ensure all information submitted is accurate and verifiable.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Complaints</h3>
+                        <p class="stat-value" id="stat-total">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Investigating</h3>
+                        <p class="stat-value" id="stat-investigating">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Closed</h3>
+                        <p class="stat-value" id="stat-closed">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Complaint View -->
+            <div id="file-complaint-view" class="view-section">
+                <h2>File a New Complaint</h2>
+                <p>Provide details of the incident. Please note that false reporting is a punishable offense.</p>
+                <form id="file-complaint-form" class="auth-form" onsubmit="handleFileComplaint(event)">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="complaint-category" required>
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="Cyber Crime">Cyber Crime</option>
+                            <option value="Theft">Theft</option>
+                            <option value="Assault">Assault</option>
+                            <option value="Fraud">Fraud</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Incident Date & Time</label>
+                        <input type="datetime-local" id="complaint-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Incident Location</label>
+                        <input type="text" id="complaint-location" required placeholder="Full address or precise location">
+                    </div>
+                    <div class="form-group">
+                        <label>Description of Incident</label>
+                        <textarea id="complaint-desc" rows="5" required placeholder="Provide an accurate description of the event..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Complaint securely</button>
+                    <div id="file-complaint-message" class="message-box" style="margin: 1rem 0;"></div>
+                </form>
+            </div>
+
+            <!-- My Complaints View -->
+            <div id="my-complaints-view" class="view-section">
+                <h2>My Filed Complaints</h2>
+                <p>View the status of your previously filed cases.</p>
+                
+                <div class="table-responsive">
+                    <table class="gov-table" id="my-complaints-table">
+                        <thead>
+                            <tr>
+                                <th>Complaint ID</th>
+                                <th>Category</th>
+                                <th>Date Filed</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="my-complaints-body">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Upload Evidence View -->
+            <div id="upload-evidence-view" class="view-section">
+                <h2>Upload Case Evidence</h2>
+                <p>Attach additional files (images/PDFs) to an existing complaint. Evidence cannot be removed once uploaded.</p>
+                <form id="upload-evidence-form" class="auth-form" onsubmit="handleUploadEvidence(event)">
+                    <div class="form-group">
+                        <label>Select Complaint</label>
+                        <select id="evidence-complaint-id" required>
+                            <option value="" disabled selected>Loading your complaints...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Evidence File</label>
+                        <input type="file" id="evidence-file" required>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Upload Evidence securely</button>
+                    <div id="upload-evidence-message" class="message-box" style="margin: 1rem 0;"></div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <footer class="gov-footer">
+        <p>&copy; 2026 CaseTrace. A Government Initiative.</p>
+    </footer>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

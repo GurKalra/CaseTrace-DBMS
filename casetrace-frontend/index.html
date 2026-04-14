@@ -28,63 +28,114 @@
                 <button class="tab-btn" onclick="switchTheme('officer')">Officer Portal</button>
             </div>
 
-            <!-- Citizen Login Section -->
+            <!-- Citizen Section -->
             <div id="citizen-section" class="form-section active">
-                <h2>Citizen Services</h2>
-                <p>Register complaints, upload evidence, and track status.</p>
+                <div style="text-align:center; padding: 2.5rem 0 0.5rem;">
+                    <h2>Citizen Services</h2>
+                    <p style="margin-bottom:0;">Register complaints, upload evidence, and track status.</p>
+                </div>
                 
-                <form id="citizen-login-form" class="auth-form" onsubmit="handleCitizenLogin(event)">
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="citizen-email" required placeholder="name@example.com">
+                <div class="split-layout">
+                    <div class="split-side register-side">
+                        <form id="citizen-register-form" class="auth-form" onsubmit="handleCitizenRegister(event)">
+                            <h3>New Citizen Registration</h3>
+                            <div class="form-group">
+                                <label>Full Legal Name</label>
+                                <input type="text" id="reg-name" required placeholder="As per official documents">
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="reg-email" required placeholder="For official communications">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" id="reg-phone" required placeholder="10-digit mobile number">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" id="reg-password" required placeholder="Create a strong password">
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Register Account</button>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="citizen-password" required placeholder="••••••••">
+                    
+                    <div class="split-divider"></div>
+                    
+                    <div class="split-side login-side">
+                        <form id="citizen-login-form" class="auth-form" onsubmit="handleCitizenLogin(event)">
+                            <h3>Secure Login</h3>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="citizen-email" required placeholder="name@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" id="citizen-password" required placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Secure Login</button>
+                        </form>
                     </div>
-                    <button type="submit" class="btn btn-primary">Secure Login</button>
-                </form>
-
-                <div class="divider"><span>OR</span></div>
-
-                <form id="citizen-register-form" class="auth-form" onsubmit="handleCitizenRegister(event)">
-                    <h3>New Citizen Registration</h3>
-                    <div class="form-group">
-                        <label>Full Legal Name</label>
-                        <input type="text" id="reg-name" required placeholder="As per official documents">
-                    </div>
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="reg-email" required placeholder="For official communications">
-                    </div>
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="tel" id="reg-phone" required placeholder="10-digit mobile number">
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="reg-password" required placeholder="Create a strong password">
-                    </div>
-                    <button type="submit" class="btn btn-secondary">Register Account</button>
-                </form>
+                </div>
             </div>
 
-            <!-- Officer Login Section -->
+            <!-- Officer Section -->
             <div id="officer-section" class="form-section" style="display: none;">
-                <h2>Department Access</h2>
-                <p>Authorized personnel login for case management.</p>
+                <div style="text-align:center; padding: 2.5rem 0 0.5rem;">
+                    <h2>Department Access</h2>
+                    <p style="margin-bottom:0;">Authorized personnel login for case management.</p>
+                </div>
                 
-                <form id="officer-login-form" class="auth-form" onsubmit="handleOfficerLogin(event)">
-                    <div class="form-group">
-                        <label>Official Email</label>
-                        <input type="email" id="officer-email" required placeholder="badge_number@police.gov">
+                <div class="split-layout">
+                    <div class="split-side register-side">
+                        <form id="officer-register-form" class="auth-form" onsubmit="handleOfficerRegister(event)">
+                            <h3>Officer Registration</h3>
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="off-reg-name" required placeholder="Official Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Badge Number</label>
+                                <input type="text" id="off-reg-badge" required placeholder="B-9999">
+                            </div>
+                            <div class="form-group">
+                                <label>Rank Title</label>
+                                <input type="text" id="off-reg-rank" required placeholder="e.g. Inspector">
+                            </div>
+                            <div class="form-group">
+                                <label>Department</label>
+                                <select id="off-reg-dept" required>
+                                    <option value="" disabled selected>Select Department</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Official Email</label>
+                                <input type="email" id="off-reg-email" required placeholder="name@police.gov">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" id="off-reg-password" required placeholder="Create password">
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Register Officer</button>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="officer-password" required placeholder="••••••••">
+                    
+                    <div class="split-divider"></div>
+
+                    <div class="split-side login-side">
+                        <form id="officer-login-form" class="auth-form" onsubmit="handleOfficerLogin(event)">
+                            <h3>Access Dashboard</h3>
+                            <div class="form-group">
+                                <label>Official Email</label>
+                                <input type="email" id="officer-email" required placeholder="badge_number@police.gov">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" id="officer-password" required placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="btn btn-primary officer-btn">Access Dashboard</button>
+                        </form>
                     </div>
-                    <button type="submit" class="btn btn-primary officer-btn">Access Dashboard</button>
-                </form>
+                </div>
             </div>
             
             <div id="api-message" class="message-box"></div>

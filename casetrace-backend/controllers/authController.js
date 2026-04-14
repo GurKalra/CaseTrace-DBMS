@@ -13,11 +13,11 @@ const registerCitizen = async (req, res) => {
 
   try {
     // SECURITY
-    const checkQuery = "SELECT * FROM Citizen WHERE email = ?";
-    const [existingUser] = await db.query(checkQuery, [email]);
+    const [existingCitizen] = await db.query("SELECT * FROM Citizen WHERE email = ? OR full_name = ?", [email, full_name]);
+    const [existingOfficer] = await db.query("SELECT * FROM Officer WHERE email = ? OR full_name = ?", [email, full_name]);
 
-    if (existingUser.length > 0) {
-      return res.status(400).json({ error: "Email already registered." });
+    if (existingCitizen.length > 0 || existingOfficer.length > 0) {
+      return res.status(400).json({ error: "Email or Name already registered in the system." });
     }
 
     // Hashing Password

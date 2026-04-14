@@ -2,11 +2,19 @@ const express = require("express");
 const router = express.Router();
 const { authenticateToken, requireOfficer } = require("../middleware/authMiddleware");
 const {
+  registerOfficer,
   officerLogin,
   getAllComplaints,
   updateComplaintStatus,
   addInvestigationNote,
+  getAllDepartments,
 } = require("../controllers/officerController");
+
+// GET DEPARTMENTS
+router.get("/departments", getAllDepartments);
+
+// OFFICER REGISTRATION
+router.post("/register", registerOfficer);
 
 // OFFICER LOGIN
 router.post("/login", officerLogin);
