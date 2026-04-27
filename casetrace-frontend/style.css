@@ -48,8 +48,10 @@ body {
     gap: 1.5rem;
 }
 
-.emblem-placeholder {
-    font-size: 3rem;
+.emblem-logo {
+    height: 3rem;
+    width: auto;
+    object-fit: contain;
 }
 
 .gov-header h1 {

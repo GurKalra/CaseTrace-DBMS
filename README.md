@@ -47,7 +47,7 @@ This platform runs on a standard **Node.js, Express, MySQL** stack alongside a V
 │   │   ├── complaints.js             # Protected citizen UI interactions
 │   │   ├── evidence.js               # File uploading paths
 │   │   └── officer.js                # Protected officer routes
-│   └── server.js                     # ⚙️ Application entry & port config
+│   └── server.js                     # Application entry & port config
 │
 └── casetrace-frontend/
     ├── index.html                    # Root split-screen multi-auth login hub
